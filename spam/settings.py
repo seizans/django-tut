@@ -11,13 +11,13 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'sample.db',
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -120,12 +120,41 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'app1'
+    'app1',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.twitter',
+    'allauth.socialaccount.providers.facebook',
 )
+
+LOGIN_REDIRECT_URL = '/app1/log'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+    'allauth.account.context_processors.account',
+    'allauth.socialaccount.context_processors.socialaccount',
+)
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'SCOPE': ['email', 'publish_stream'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'METHOD': 'oauth2',
+        'LOCALE_FUNC': lambda request: 'ja_JP'
+    },
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
